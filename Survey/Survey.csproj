@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <Version>1.0.0</Version>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>CodeVision</Authors>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <Product>Survey</Product>
+    <PackageId>Survey</PackageId>
+    <Title>Survey</Title>
+    <Description>Survey Package for Umbraco</Description>
+    <PackageProjectUrl>https://github.com/CVTPL/CV.Survey</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl>https://github.com/CVTPL/CV.Survey/blob/main/images/logo.png?raw=true</PackageIconUrl> 
+    <RepositoryUrl>https://github.com/CVTPL/CV.Survey</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <None Include="Views\**\*.*" Pack="true" PackagePath="Views"></None>
+    <None Include="wwwroot\**\*.*" Pack="true" PackagePath="wwwroot"></None>
+    <None Include="build\Survey.props" Pack="true" PackagePath="build"></None>
+
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Migrations\package.zip" />
+    <EmbeddedResource Include="Migrations\package.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.1.1" />
+    <PackageReference Include="Survey.Core" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../images/logo.png" Pack="true" PackPath="\" />
+  </ItemGroup>
+
+</Project>

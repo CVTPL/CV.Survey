@@ -1,0 +1,17 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   
+        
+    <Target Name="CopyFiles" BeforeTargets="Build">
+        <ItemGroup>
+            <File Include="$(MSBuildThisFileDirectory)..\Views\**\*.*"></File>
+        </ItemGroup>
+        
+        <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)Views\Shared\Components\Survey\"></Exec>
+        <ItemGroup>
+            <File Include="$(MSBuildThisFileDirectory)..\wwwroot\SurveyAssets\**\*.*"></File>
+        </ItemGroup>
+        
+        <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)wwwroot\SurveyAssets\"></Exec>    
+    </Target>
+
+</Project>
