@@ -5,7 +5,9 @@
 @using Umbraco.Cms.Core
 @inject ServiceContext Services
 @{ Layout = "Master.cshtml"; }
-@{ var site = Umbraco.Content(1067);
+@{ 
+    //var site = Umbraco.Content(1067);
+    IPublishedContent site = Model.FirstChild();
     var ResponseItems = site.Children.GroupBy(c => c.GetProperty("response"));
     var array = ResponseItems.ToArray();
 
