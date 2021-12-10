@@ -3,7 +3,7 @@
         
     <Target Name="CopyFiles" BeforeTargets="Build">
         <ItemGroup>
-            <File Include="$(MSBuildThisFileDirectory)..\Views\**\*.*"></File>
+            <File Include="$(MSBuildThisFileDirectory)..\Views\Shared\Components\Survey\**\*.*"></File>
         </ItemGroup>
         
         <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)Views\Shared\Components\Survey\"></Exec>
@@ -11,7 +11,12 @@
             <File Include="$(MSBuildThisFileDirectory)..\wwwroot\SurveyAssets\**\*.*"></File>
         </ItemGroup>
         
-        <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)wwwroot\SurveyAssets\"></Exec>    
+        <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)wwwroot\SurveyAssets\"></Exec>
+      <ItemGroup>
+        <File Include="$(MSBuildThisFileDirectory)..\Views\Partials\**\*.*"></File>
+      </ItemGroup>
+
+      <Exec Command="xcopy /I/e/d/s/y %(File.Identity) $(ProjectDir)Views\Partials\"></Exec>
     </Target>
 
 </Project>

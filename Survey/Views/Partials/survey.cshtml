@@ -1,0 +1,31 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Services
+@using Umbraco.Cms.Core
+@inject ServiceContext Services
+
+@{
+    var contentService = Services.ContentService;
+    // var homeNode = contentService.GetRootContent();
+
+    // IPublishedContent homePage = Umbraco.AssignedContentItem.Ancestor(Model.);
+
+    if (Model != null)
+    {
+        if (!Model.Children().Any(x => x.ContentType.Alias.InvariantEquals("cVSurvey")))
+        //   if (!homeNode.Children().Any(x => x.ContentType.Alias.InvariantEquals("SITE_404Page")))
+        {
+            var surveyudi = new GuidUdi("document", Model.Key);
+            var surveyPage = contentService.CreateContent("CVSurvey", surveyudi, "cVSurvey");
+            contentService.SaveAndPublish(surveyPage);
+
+            var responseudi = new GuidUdi("document", surveyPage.Key);
+            var responsePage = contentService.CreateContent("Response", responseudi, "response");
+
+
+            //var responseitemudi = new GuidUdi("document", responsePage.Key);
+            //var responseItem = contentService.CreateContent("Response Item", responseitemudi, "responseItem");
+        }
+
+    }
+}

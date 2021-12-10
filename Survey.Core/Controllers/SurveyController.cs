@@ -15,6 +15,9 @@ using Umbraco.Cms.Core.Routing;
 using Umbraco.Extensions;
 using Umbraco.Cms.Core.Security;
 using SurveyPackage.Models;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace SurveyPackage.Controllers
 {
@@ -43,7 +46,7 @@ namespace SurveyPackage.Controllers
             _config = Configuration;
             _logger = logger;
             _emailSender = emailSender;
-            _memberService = memberService;
+          //  _memberService = memberService;
             _manager = manager;
             _hasher = hasher;
         }
@@ -52,10 +55,16 @@ namespace SurveyPackage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var parentId = new Guid("f0b7a131-8163-49ee-8dc0-fe0f20f5e413");
-                TempData["ResponseMessage"] = "Thank you for filling out the form!";
+                 var siteroot = CurrentPage.AncestorOrSelf(1);
+                IPublishedContent cvSurvey = siteroot.FirstChild();
+                IPublishedContent response = cvSurvey.FirstChild();
+
                 var contentService = Services.ContentService;
-                var childnode = contentService.Create(model.category, parentId, "responseItem");
+               // IContent cVSurvey = contentService.CreateContent("CV Survey", udi, "cVSurvey");
+              //  var parentId = new Guid("f0b7a131-8163-49ee-8dc0-fe0f20f5e413");
+                TempData["ResponseMessage"] = "Thank you for filling out the form!";
+               
+                var childnode = contentService.Create(model.category, response.Key, "responseItem");
                 childnode.SetValue("response", model.category);
                 contentService.SaveAndPublish(childnode);
                 return RedirectToCurrentUmbracoPage();
@@ -66,7 +75,6 @@ namespace SurveyPackage.Controllers
                 ModelState.AddModelError("", "Something goes wrong!");
                 return CurrentUmbracoPage();
             }
-
         }
     }
 }

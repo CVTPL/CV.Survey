@@ -1,14 +1,73 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.CVsurvey>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
-@{
-	Layout = "Master.cshtml";
-}
-@{
-    var title = Model.Value<string>("title");
-    var Subtitle = Model.Value<string>("subtitle");
+@using Umbraco.Cms.Core.Services
+@using Umbraco.Cms.Core
+@inject ServiceContext Services
+@{ Layout = "Master.cshtml"; }
+@{ var site = Umbraco.Content(1067);
+    var ResponseItems = site.Children.GroupBy(c => c.GetProperty("response"));
+    var array = ResponseItems.ToArray();
+
     var categoriesList = Model.Value<IEnumerable<IPublishedElement>>("categoriesList");
-}
+    var Total = new List<dynamic>();
+
+    foreach (var item in categoriesList)
+    {
+        var total = 0;
+        dynamic Obj = new System.Dynamic.ExpandoObject();
+        var dictionary = Obj as IDictionary<string, object>;
+        dictionary["Name"] = item.Value<string>("title");
+        foreach (var itm in array)
+        {
+            foreach (var i in itm)
+            {
+                if (item.Value<string>("title") == i.Value<string>("response"))
+                {
+                    total = total + 1;
+                }
+
+            }
+        }
+        dictionary["Total"] = total;
+        Total.Add(Obj);
+    }
+    var dictionaryCount = Total.Count;
+    var ResponseJsonCollection = Newtonsoft.Json.JsonConvert.SerializeObject(Total);
+@Html.Hidden("Responses", ResponseJsonCollection); }
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        debugger
+        var count = @dictionaryCount;
+        var totaldic = JSON.parse($('#Responses').val());
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Respone');
+        data.addColumn('number', 'Total');
+        data.addRows(count);
+        var i;
+        for (i = 0; i < count; i++) {
+            debugger
+            data.setCell(i, 0, totaldic[i].Name);
+            data.setCell(i, 1, totaldic[i].Total);
+        }
+        var options = {
+            title: 'Responses'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+</script>
+@{ var title = Model.Value<string>("title");
+    var Subtitle = Model.Value<string>("subtitle");
+    //var categoriesList = Model.Value<IEnumerable<IPublishedElement>>("categoriesList"); }
 <h1>@title</h1>
 <h3>@Subtitle</h3>
 @await Component.InvokeAsync("Survey", new { list = categoriesList })
+<div id="piechart" style="width: 900px; height: 500px;"></div>
