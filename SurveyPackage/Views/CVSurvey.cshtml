@@ -66,7 +66,8 @@
 </script>
 @{ var title = Model.Value<string>("title");
     var Subtitle = Model.Value<string>("subtitle");
-    //var categoriesList = Model.Value<IEnumerable<IPublishedElement>>("categoriesList"); }
+    //var categoriesList = Model.Value<IEnumerable<IPublishedElement>>("categoriesList");
+    }
 <h1>@title</h1>
 <h3>@Subtitle</h3>
 @await Component.InvokeAsync("Survey", new { list = categoriesList })
